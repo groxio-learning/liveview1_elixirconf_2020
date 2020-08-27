@@ -26,6 +26,8 @@ defmodule RemembrallWeb.Router do
 
     live "/passages/:id", PassageLive.Show, :show
     live "/passages/:id/show/edit", PassageLive.Show, :edit
+
+    live "/game/:id", GameLive
   end
 
   # Other scopes may use custom stacks.

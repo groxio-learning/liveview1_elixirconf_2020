@@ -1,5 +1,6 @@
 defmodule Remembrall.Game.Eraser do
   defstruct [:plan, :text]
+
   def new(text, steps) do
     %__MODULE__{text: text, plan: make_plan(text,steps)}
   end
