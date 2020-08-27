@@ -1,0 +1,32 @@
+<h1>Show Passage</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, RemembrallWeb.PassageLive.FormComponent,
+    id: @passage.id,
+    title: @page_title,
+    action: @live_action,
+    passage: @passage,
+    return_to: Routes.passage_show_path(@socket, :show, @passage) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @passage.title %>
+  </li>
+
+  <li>
+    <strong>Text:</strong>
+    <%= @passage.text %>
+  </li>
+
+  <li>
+    <strong>Steps:</strong>
+    <%= @passage.steps %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.passage_show_path(@socket, :edit, @passage), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.passage_index_path(@socket, :index) %></span>

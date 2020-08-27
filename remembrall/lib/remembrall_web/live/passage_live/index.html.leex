@@ -1,0 +1,34 @@
+<h1>Listing Passages</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, RemembrallWeb.PassageLive.FormComponent,
+    id: @passage.id || :new,
+    title: @page_title,
+    action: @live_action,
+    passage: @passage,
+    return_to: Routes.passage_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Steps</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="passages">
+    <%= for passage <- @passages do %>
+      <tr id="passage-<%= passage.id %>">
+        <td><%= live_patch passage.title, to: Routes.passage_index_path(@socket, :edit, passage) %></td>
+        <td><%= passage.steps %></td>
+        <td>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: passage.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Passage", to: Routes.passage_index_path(@socket, :new) %></span>

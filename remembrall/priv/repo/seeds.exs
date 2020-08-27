@@ -1,14 +1,6 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Remembrall.Repo.insert!(%Remembrall.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+alias Remembrall.Library.Passage
+alias Remembrall.Repo
+
 Repo.insert! %Passage{
     title: "IT Crowd",
     text: "Have you tried turning it off and on again?",

@@ -19,6 +19,13 @@ defmodule RemembrallWeb.Router do
 
     live "/", PageLive, :index
     live "/enter", FrontDoorLive
+
+    live "/passages", PassageLive.Index, :index
+    live "/passages/new", PassageLive.Index, :new
+    live "/passages/:id/edit", PassageLive.Index, :edit
+
+    live "/passages/:id", PassageLive.Show, :show
+    live "/passages/:id/show/edit", PassageLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
