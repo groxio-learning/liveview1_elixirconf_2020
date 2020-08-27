@@ -18,6 +18,7 @@ defmodule RemembrallWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/enter", FrontDoorLive
   end
 
   # Other scopes may use custom stacks.
