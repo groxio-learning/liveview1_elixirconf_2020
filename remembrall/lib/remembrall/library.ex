@@ -6,7 +6,10 @@ defmodule Remembrall.Library do
   import Ecto.Query, warn: false
   alias Remembrall.Repo
 
-  alias Remembrall.Library.Passage
+  alias Remembrall.Library.{
+    Passage,
+    PassageQuery
+  }
 
   @doc """
   Returns the list of passages.
@@ -22,24 +25,16 @@ defmodule Remembrall.Library do
   end
 
   def next_passage(id) do
-    (from p in Passage,
-    where: p.id > ^id,
-    order_by: p.id, 
-    limit: 1,
-    select: p.id)
-
+    id
+    |> PassageQuery.next_query
     |> Repo.all
     |> List.first
     |> Kernel.||(next_passage(0))
   end
 
   def previous_passage(id) do
-    (from p in Passage,
-    where: p.id < ^id,
-    order_by: [desc: p.id], 
-    limit: 1,
-    select: p.id)
-
+    id
+    |> PassageQuery.previous_query
     |> Repo.all
     |> List.first
     |> Kernel.||(previous_passage(9999))
