@@ -1,14 +1,16 @@
 defmodule RemembrallWeb.FrontDoorLive do
   use RemembrallWeb, :live_view
 
+  alias Remembrall.Library
+
   def mount(_params, _session, socket) do
     {
       :ok,
       assign(
         socket,
-        passage_key: :it
+        passage_id: Library.next_passage(0)
       )
-      |> load_key()
+      |> load_id()
     }
   end
 
@@ -28,66 +30,34 @@ defmodule RemembrallWeb.FrontDoorLive do
 
   defp previous(socket) do
     socket
-    |> previous_key()
-    |> load_key()
-  end
-
-  defp passage(:star_wars) do
-    %{
-      title: "StarWars",
-      text: "I am your father",
-      steps: 2
-    }
-  end
-
-  defp passage(:lotr) do
-    %{
-      title: "LOTR",
-      text: "One does not simply walk into Mordor",
-      steps: 4
-    }
-  end
-
-  defp passage(:it) do
-    %{
-      title: "IT Crowd",
-      text: "Have you tried turning it off and on again?",
-      steps: 3
-    }
+    |> previous_id()
+    |> load_id()
   end
 
   defp next(socket) do
     socket
-    |> next_key()
-    |> load_key()
+    |> next_id()
+    |> load_id()
   end
 
-  defp next_key(socket) do
-    new_key = find_next_key(socket.assigns.passage_key)
+  defp next_id(socket) do
+    new_id = Library.next_passage(socket.assigns.passage_id)
     assign(
       socket,
-      passage_key: new_key
+      passage_id: new_id
     )
   end
 
-  defp previous_key(socket) do
-    new_key = find_previous_key(socket.assigns.passage_key)
+  defp previous_id(socket) do
+    new_id = Library.previous_passage(socket.assigns.passage_id)
     assign(
       socket,
-      passage_key: new_key
+      passage_id: new_id
     )
   end
 
-  defp find_next_key(:star_wars), do: :lotr
-  defp find_next_key(:lotr), do: :it
-  defp find_next_key(:it), do: :star_wars
-
-  defp find_previous_key(:lotr), do: :star_wars
-  defp find_previous_key(:it), do: :lotr
-  defp find_previous_key(:star_wars), do: :it
-
-  defp load_key(socket) do
-    assign(socket, passage: passage(socket.assigns.passage_key))
+  defp load_id(socket) do
+    assign(socket, passage: Library.get_passage!(socket.assigns.passage_id))
   end
 
   def handle_event("previous", _meta, socket) do
