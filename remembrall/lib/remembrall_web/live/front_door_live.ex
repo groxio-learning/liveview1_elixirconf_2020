@@ -6,12 +6,9 @@ defmodule RemembrallWeb.FrontDoorLive do
       :ok,
       assign(
         socket,
-        passage: %{
-          title: "ITCrowd",
-          text: "Have you tried turning it off and on again?",
-          steps: 3
-        }
+        passage_key: :it
       )
+      |> load_key()
     }
   end
 
@@ -30,11 +27,9 @@ defmodule RemembrallWeb.FrontDoorLive do
   end
 
   defp previous(socket) do
-    assign(
-        socket,
-        passage_key: :star_wars,
-        passage: passage(:star_wars)
-      )
+    socket
+    |> previous_key()
+    |> load_key()
   end
 
   defp passage(:star_wars) do
@@ -45,15 +40,54 @@ defmodule RemembrallWeb.FrontDoorLive do
     }
   end
 
+  defp passage(:lotr) do
+    %{
+      title: "LOTR",
+      text: "One does not simply walk into Mordor",
+      steps: 4
+    }
+  end
+
+  defp passage(:it) do
+    %{
+      title: "IT Crowd",
+      text: "Have you tried turning it off and on again?",
+      steps: 3
+    }
+  end
+
   defp next(socket) do
+    socket
+    |> next_key()
+    |> load_key()
+  end
+
+  defp next_key(socket) do
+    new_key = find_next_key(socket.assigns.passage_key)
     assign(
-        socket,
-        passage: %{
-          title: "LOTR",
-          text: "One does not simply walk into Mordor",
-          steps: 4
-        }
-      )
+      socket,
+      passage_key: new_key
+    )
+  end
+
+  defp previous_key(socket) do
+    new_key = find_previous_key(socket.assigns.passage_key)
+    assign(
+      socket,
+      passage_key: new_key
+    )
+  end
+
+  defp find_next_key(:star_wars), do: :lotr
+  defp find_next_key(:lotr), do: :it
+  defp find_next_key(:it), do: :star_wars
+
+  defp find_previous_key(:lotr), do: :star_wars
+  defp find_previous_key(:it), do: :lotr
+  defp find_previous_key(:star_wars), do: :it
+
+  defp load_key(socket) do
+    assign(socket, passage: passage(socket.assigns.passage_key))
   end
 
   def handle_event("previous", _meta, socket) do
