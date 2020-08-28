@@ -25,6 +25,7 @@ defmodule RemembrallWeb.FrontDoorLive do
       <%= @passage.text %>
     </pre>
     <h2>Memorize this in <%= @passage.steps %> steps</h2>
+    <button phx-click="choose">Choose</button>
     """
   end
 
@@ -66,5 +67,9 @@ defmodule RemembrallWeb.FrontDoorLive do
 
   def handle_event("next", _meta, socket) do
     {:noreply, next(socket)}
+  end
+
+  def handle_event("choose", _meta, socket) do
+    {:noreply, push_redirect(socket, to: "/game/#{socket.assigns.passage_id}")}
   end
 end
